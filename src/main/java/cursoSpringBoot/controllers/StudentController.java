@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import cursoSpringBoot.domain.Student;
 
@@ -43,8 +44,14 @@ public class StudentController {
         student.setId(nextId.getAndIncrement());
         students.add(student);
 
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(student.getId())
+                .toUri();
+
         return ResponseEntity
-                .created(URI.create("/students/" + student.getId()))
+                .created(location)
                 .body(student);
     }
 
