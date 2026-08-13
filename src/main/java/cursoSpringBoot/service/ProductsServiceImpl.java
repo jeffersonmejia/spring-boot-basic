@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ProductsServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProductsServiceImpl implements ProductsService {
 
     List<Product> Products = new ArrayList<>(Arrays.asList(
             new Product(1, "Laptop", 10.99, 100),
@@ -15,6 +18,7 @@ public class ProductsServiceImpl {
             new Product(4, "Smartwatch", 15.99, 75),
             new Product(5, "Headphones", 7.99, 150)));
 
+    @Override
     public List<Product> getProducts() {
         return Products;
     }
