@@ -3,6 +3,7 @@ package cursoSpringBoot.controllers;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,17 +35,18 @@ public class CustomerController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<Customer> GetCliente(@PathVariable String username) {
+    public ResponseEntity<?> GetCliente(@PathVariable String username) {
         for (Customer customer : customers) {
             if (customer.getUsername().equalsIgnoreCase(username)) {
                 return ResponseEntity.ok(customer);
             }
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("No se encontro un cliente con el username: " + username);
     }
 
     @PostMapping
-    public ResponseEntity<Customer> postCliente(@RequestBody Customer customer) {
+    public ResponseEntity<?> postCliente(@RequestBody Customer customer) {
         customers.add(customer);
 
         URI location = ServletUriComponentsBuilder
@@ -57,7 +59,7 @@ public class CustomerController {
     }
 
     @PutMapping
-    public ResponseEntity<Customer> putCliente(@RequestBody Customer customer) {
+    public ResponseEntity<?> putCliente(@RequestBody Customer customer) {
         for (Customer c : customers) {
             if (c.getID() == customer.getID()) {
                 c.setName(customer.getName());
@@ -66,19 +68,21 @@ public class CustomerController {
                 return ResponseEntity.ok(c);
             }
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("No se pudo actualizar: no existe un cliente con el ID " + customer.getID());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCliente(@PathVariable int id) {
+    public ResponseEntity<?> deleteCliente(@PathVariable int id) {
         boolean removed = customers.removeIf(customer -> customer.getID() == id);
         return removed
                 ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+                : ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No se pudo eliminar: no existe un cliente con el ID " + id);
     }
 
     @PatchMapping
-    public ResponseEntity<Customer> patchCliente(@RequestBody Customer customer) {
+    public ResponseEntity<?> patchCliente(@RequestBody Customer customer) {
         for (Customer c : customers) {
             if (c.getID() == customer.getID()) {
                 if (customer.getName() != null) {
@@ -93,6 +97,7 @@ public class CustomerController {
                 return ResponseEntity.ok(c);
             }
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("No se pudo actualizar: no existe un cliente con el ID " + customer.getID());
     }
 }
