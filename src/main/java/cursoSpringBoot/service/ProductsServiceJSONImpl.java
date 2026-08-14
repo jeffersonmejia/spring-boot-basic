@@ -1,0 +1,32 @@
+package cursoSpringBoot.service;
+
+import java.util.List;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
+
+import cursoSpringBoot.domain.Product;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+
+@Primary
+@Service
+public class ProductsServiceJSONImpl implements ProductsService {
+
+    @Override
+    public List<Product> getProducts() {
+        List<Product> products;
+
+        try {
+            products = new ObjectMapper()
+                    .readValue(this.getClass().getResourceAsStream("/products.json"),
+                            new TypeReference<List<Product>>() {
+                            });
+            return products;
+        } catch (JacksonException e) {
+            throw new RuntimeException("Error al leer el archivo JSON de productos", e);
+        }
+    }
+
+}
