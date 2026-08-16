@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 @ConditionalOnProperty(name = "service.products", havingValue = "list")
 public class ProductsServiceImpl implements ProductsService {
 
+    public ProductsServiceImpl() {
+        System.out.println("Instancia de ProductsServiceImpl");
+    }
+
     List<Product> Products = new ArrayList<>(Arrays.asList(
             new Product(1, "Laptop", 10.99, 100),
             new Product(2, "Tablet", 19.99, 50),

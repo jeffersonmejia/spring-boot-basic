@@ -2,8 +2,8 @@ package cursoSpringBoot.service;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +12,15 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
-@Primary
-@Service /* ("jsonResourceService") */
-@ConditionalOnProperty(name = "service.products", havingValue = "in-memory")
+@Primary /* ESTRATEGIA #1 */
+@Service /* ("jsonResourceService") ESTRATEGIA #2 */
+@ConditionalOnProperty(name = "service.products", havingValue = "json") /* ESTRATEGIA #3 */
+@Lazy /* ESTRATEGIA #4 */
 public class ProductsServiceJSONImpl implements ProductsService {
+
+    public ProductsServiceJSONImpl() {
+        System.out.println("Instancia de ProductsServiceJSONImpl");
+    }
 
     @Override
     public List<Product> getProducts() {
