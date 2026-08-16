@@ -17,7 +17,7 @@ import cursoSpringBoot.service.ProductsService;
 public class ProductController {
 
     @Autowired
-    @Qualifier("jsonResourceService")
+    // @Qualifier("jsonResourceService")
     private ProductsService productsService;
 
     @GetMapping
